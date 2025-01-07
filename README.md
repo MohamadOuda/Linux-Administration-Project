@@ -4,9 +4,9 @@ This project is a comprehensive Linux Administration task, showcasing proficienc
 
 The project comprises several modules, including:
 
-. Bash scripting for user and directory management.
-. Cryptographic module integration using Makefiles and CMake.
-. A TCP-based Enhanced Remote Command Execution Application (ERCEA) for client-server communication.
+- Bash scripting for user and directory management.
+- Cryptographic module integration using Makefiles and CMake.
+- A TCP-based Enhanced Remote Command Execution Application (ERCEA) for client-server communication.
 
 
 Contributors
