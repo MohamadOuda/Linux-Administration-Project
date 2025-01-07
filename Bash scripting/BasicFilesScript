@@ -1,0 +1,131 @@
+#! /bin/bash
+
+#------------------------------------------------------------------
+#|                 Checks If An Argument Is Empty                 |
+#------------------------------------------------------------------
+checkArgument() {
+    if [ -z "$1" ]; then
+        echo
+        echo "Error: $2 is empty. Please provide a valid $2."
+        echo
+        exit 1
+    fi
+}
+#------------------------------------------------------------------
+
+#------------------------------------------------------------------
+#|                      Checks If User Exists                     |
+#------------------------------------------------------------------
+checkUser() {
+    if id "$1" &>/dev/null; then
+        echo -e "Beginning Operation\n"
+    else
+        echo -e "User Doesn't Exist\n"
+        exit 1
+    fi
+}
+#------------------------------------------------------------------
+
+#------------------------------------------------------------------
+#|          Check Whether The Script Was Run With sudo            |
+#------------------------------------------------------------------
+
+# $EUID: Effective User ID if it equals to 0 (Root User ID) then
+# it was run with sudo
+
+if [ "$EUID" -ne 0 ]; then
+    echo
+    echo "Permission Denied."
+    echo
+    exit 1
+fi
+#------------------------------------------------------------------
+
+checkArgument "$1" "username" #checks passed user name argument
+checkUser "$1"
+
+
+#a) Check if the directory we want to create already exists,
+# and if it does, remove it.
+
+GeneratedDir=./BasicFiles
+CurrentPath=$(pwd)
+TargetUser=$1
+TargetPath=$(eval echo ~$TargetUser)   #Home Directory of Target User
+TarFile="BasicFiles.tar"
+
+if [ -d $TargetPath ]; then
+    echo "$TargetPath"
+else
+
+    echo "User $TargetUser does not have a home directory"
+    exit 1
+fi
+
+
+if [ -d $GeneratedDir ]; then
+
+    rm -r $GeneratedDir
+    echo "An old instance of $GeneratedDir exists, removing it..."
+    rm $CurrentPath/$TarFile
+    echo -e "Removed\n\n" # you can use the '-e' flag to tell the echo command that you want to enable the interpretation of backslash escapes.
+fi
+
+mkdir $GeneratedDir
+echo "Creating Directory $GeneratedDir ..."
+echo -e "Created\n\n"
+
+#b) Create the directory & create 4 files in this directory
+# (main.c, main.h, hello.c, hello.h)
+touch $GeneratedDir/main.c $GeneratedDir/main.h $GeneratedDir/hello.c $GeneratedDir/hello.h
+echo "Creating Files  (main.c, main.h, hello.c, hello.h) ..."
+echo -e "Created\n\n"
+
+#c) Loop on each of these files and write in them “this file is named ….”
+# (write the name of the file)
+
+# $file : holds the path of the current file in the loop
+# basename $file : removes directory leaving only file name
+for file in $GeneratedDir/*; do
+    if [ -f $file ]; then
+        filename=$(basename $file)
+
+        echo "this file is named $filename" >$file
+    fi
+done
+
+#d) Compress this directory into a tar file
+tar -cf $TarFile $GeneratedDir
+
+
+#e) “We want to change directory “cd” into the home directory of the new user, can we ??”  
+# if we can’t, solve this problem. ------> Solution : Enter privileged shell mode
+
+sudo -s bash -c  'cd $TargetPath' #This uses sudo -s to open a privileged shell, and the bash -c argument ensures the commands are passed as a string
+
+
+#Interesting Solution:
+# sudo -s <<EOF
+# cd $TargetPath
+# cp $CurrentPath/$TarFile $TargetPath && tar -xf $TarFile
+# exit
+# EOF
+
+#sudo -s <<EOF starts a privileged shell with sudo and reads the commands under the EOF marker.
+#All the commands between <<EOF and EOF are executed in the privileged shell.
+#Once the commands are executed, it exits back to the normal user shell.
+
+#f) Copy this tar file to the new home directory, go there and extract it. 
+
+
+echo "Copying Compressed File to $TargetPath, then extracting ..."
+echo -e "\n\n"
+cp $CurrentPath/$TarFile $TargetPath && tar -xf $TarFile
+
+exit
+
+echo "Finished"
+
+
+
+

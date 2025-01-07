@@ -1,0 +1,127 @@
+#! /bin/bash
+
+#------------------------------------------------------------------
+#|                 Checks If An Argument Is Empty                 |
+#------------------------------------------------------------------
+checkArgument() {
+    if [ -z "$1" ]; then
+        echo
+        echo "Error: $2 is empty. Please provide a valid $2."
+        echo
+        exit 1
+    fi
+}
+#------------------------------------------------------------------
+
+#------------------------------------------------------------------
+#|          Check Whether The Script Was Run With sudo            |
+#------------------------------------------------------------------
+
+# $EUID: Effective User ID if it equals to 0 (Root User ID) then
+# it was run with sudo
+
+if [ "$EUID" -ne 0 ]; then
+    echo
+    echo "Permission Denied."
+    echo
+    exit 1
+fi
+#------------------------------------------------------------------
+
+checkArgument "$1" "username" #checks passed user name argument
+checkArgument "$2" "password"
+checkArgument "$3" "group name"
+
+a_username=$1
+a_userpass=$2
+a_groupname=$3
+GROUP_ID=200
+USER_ID=160
+
+if id "$a_username" &>/dev/null; then
+    echo -e "User Already Exists"
+else
+
+    if [ "$a_groupname" == "$a_username" ]; then
+        echo
+        echo "Error: Group name can't be the same as the user name"
+        echo
+        exit 1
+    fi
+
+    echo
+    echo "Creating User with these Details:"
+    echo
+    echo "=================================="
+    echo "           User Details           "
+    echo "=================================="
+    echo "Username   : $a_username"
+    echo "Password   : $a_userpass"
+    echo "Group Name : $a_groupname"
+    echo "=================================="
+
+    useradd -m -N -s /bin/bash $a_username
+
+    echo "$a_username:$a_userpass" | sudo chpasswd
+
+    echo
+    echo
+    echo "User Created...."
+    echo
+    echo "=================================="
+    echo "         User Details(1/3)        "
+    echo "=================================="
+    echo "User ID    : $(echo $(id -u $a_username))"
+    echo "Group ID   : $(echo $(id -g $a_username))"
+    echo "Groups     : $(echo $(id -Gn $a_username))"
+    echo "=================================="
+
+    echo
+    echo
+    echo "Creating Group...."
+    echo
+    groupadd -g $GROUP_ID $a_groupname
+
+    echo "Assigning user to group $a_groupname with GID=$GROUP_ID."
+
+    usermod -aG $a_groupname $a_username
+
+    # Get the old UID and store it in a variable
+    old_uid=$(id -u $a_username)
+
+    # Get the old GID and store it in a variable
+    old_gid=$(id -g $a_username)
+
+    echo
+    echo "=================================="
+    echo "         User Details(2/3)        "
+    echo "=================================="
+    echo "User ID    : $(echo $(id -u $a_username))"
+    echo "Group ID   : $(echo $(id -g $a_username))"
+    echo "Groups     : $(echo $(id -Gn $a_username))"
+    echo "=================================="
+
+    echo
+    echo
+    echo "Changing User ID to $USER_ID and assigning $a_groupname to its primary group."
+    echo
+    usermod -g $a_groupname -u $USER_ID $a_username -aG users
+
+    echo "User and group information:"
+    echo
+    echo "=================================="
+    echo "         User Details(3/3)        "
+    echo "=================================="
+    echo "User ID    : $(echo $(id -u $a_username))"
+    echo "Group ID   : $(echo $(id -g $a_username))"
+    echo "Groups     : $(echo $(id -Gn $a_username))"
+    echo "=================================="
+    echo
+    echo "Finalizing (Changing Files Ownership)...."
+    echo
+    sudo find / -user $old_uid -exec chown -hf $a_username {} \; 2>/dev/null
+    udo find / -user $old_gid -exec chgrp -hf $a_groupname {} \; 2>/dev/null
+
+    echo "Done."
+
+fi

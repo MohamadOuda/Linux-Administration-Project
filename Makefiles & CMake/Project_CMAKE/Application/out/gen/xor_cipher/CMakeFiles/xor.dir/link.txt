@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -shared -Wl,-soname,libxor.so -o ../../lib/libxor.so CMakeFiles/xor.dir/src/xor_encrypt.c.o CMakeFiles/xor.dir/src/xor_decrypt.c.o 

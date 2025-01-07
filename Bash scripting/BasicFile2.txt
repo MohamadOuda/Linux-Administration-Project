@@ -1,0 +1,21 @@
+Mohamed Ouda
+
+
+# g) Switch to the newly created user
+su new_user
+
+# h) Display all the files inside the extracted folder recursively and with long listing format
+find /home/new_user/BasicFiles -type f -exec ls -l {} +
+
+# i) Change the owner of this directory recursively to be the new user
+sudo chown -R new_user:new_user /home/new_user/BasicFiles
+
+# j) Again, display all the files inside the extracted folder recursively and with long listing format
+find /home/new_user/BasicFiles -type f -exec ls -l {} +
+
+# k) Search for the word “file” in the extracted directory recursively
+grep -r "file" /home/new_user/BasicFiles
+
+# l) Remove all the files ending with “.c”
+find /home/new_user/BasicFiles -name "*.c" -type f -delete
+

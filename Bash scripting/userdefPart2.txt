@@ -1,0 +1,19 @@
+Mohamed Ouda
+
+
+
+We want to make this script globally reachable (i.e. you can run from anywhere in the system 
+without indicating its path, so that we could use “userdef” instead of “./userdef”). 
+m) How can we achieve this (2 methods) ? Write the steps to these 2 methods in a text file. 
+
+=> Method 1) We can do so by adding our script to $PATH ( sudo mv userdef /usr/local/bin/ )
+=> Method 2) We can also do so by adding its directory to $PATH (echo 'export PATH=$PATH:/home/user/scripts' >> ~/.bashrc)
+
+n) We would like this change to be permanent, how can we do this? 
+
+=> The first Method is permanent the seconf method requires this change to be in .bashrc to be permanent 
+
+o) We just made this change permanent, but we don’t want to wait until another terminal is 
+opened, we would like to make this change NOW, and in this terminal. What could we do? 
+
+=> this is only needed for the second method to take effect immediately which is sourcing the bashrc for the change to take effect in same shell (source ~/.bashrc)

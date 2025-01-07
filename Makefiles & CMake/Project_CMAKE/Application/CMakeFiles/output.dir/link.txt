@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/output.dir/app.c.o -o output  -Wl,-rpath,/home/mint/Desktop/LinuxAdminProj-MohamedOuda/Part2/ProjectCMAKE/Application/out/lib out/lib/libcaesar.a out/lib/libxor.so 

@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libcaesar.a CMakeFiles/caesar.dir/src/caesar_encrypt.c.o CMakeFiles/caesar.dir/src/caesar_decrypt.c.o
+/usr/bin/ranlib ../../lib/libcaesar.a

@@ -1,0 +1,9 @@
+/home/mint/Desktop/LinuxAdminProj-MohamedOuda/Part2/ProjectCMAKE/Application/CMakeFiles/output.dir
+/home/mint/Desktop/LinuxAdminProj-MohamedOuda/Part2/ProjectCMAKE/Application/CMakeFiles/edit_cache.dir
+/home/mint/Desktop/LinuxAdminProj-MohamedOuda/Part2/ProjectCMAKE/Application/CMakeFiles/rebuild_cache.dir
+/home/mint/Desktop/LinuxAdminProj-MohamedOuda/Part2/ProjectCMAKE/Application/out/gen/caesar_cipher/CMakeFiles/caesar.dir
+/home/mint/Desktop/LinuxAdminProj-MohamedOuda/Part2/ProjectCMAKE/Application/out/gen/caesar_cipher/CMakeFiles/edit_cache.dir
+/home/mint/Desktop/LinuxAdminProj-MohamedOuda/Part2/ProjectCMAKE/Application/out/gen/caesar_cipher/CMakeFiles/rebuild_cache.dir
+/home/mint/Desktop/LinuxAdminProj-MohamedOuda/Part2/ProjectCMAKE/Application/out/gen/xor_cipher/CMakeFiles/xor.dir
+/home/mint/Desktop/LinuxAdminProj-MohamedOuda/Part2/ProjectCMAKE/Application/out/gen/xor_cipher/CMakeFiles/edit_cache.dir
+/home/mint/Desktop/LinuxAdminProj-MohamedOuda/Part2/ProjectCMAKE/Application/out/gen/xor_cipher/CMakeFiles/rebuild_cache.dir
